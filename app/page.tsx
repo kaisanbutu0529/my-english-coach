@@ -55,41 +55,43 @@ const shuffleArray = (array: any) => {
 };
 
 const prepareQuestions = (questions: any, useMock = false) => {
-  const cloned = questions.map((item) => ({
+  const cloned = questions.map((item: any) => ({
     ...item,
     choices: Array.isArray(item.choices) ? [...item.choices] : []
   }));
   if (!useMock) return cloned;
 
-  return shuffleArray(cloned).map((item) => ({
+  return shuffleArray(cloned).map((item: any) => ({
     ...item,
     choices: shuffleArray(item.choices)
   }));
 };
 
 const splitSentences = (text: any) =>
-  text.replace(/\r/g, ' ').replace(/\n+/g, ' ').split(/[.!?。！？]/).map((s) => s.trim()).filter(Boolean);
+  text.replace(/\r/g, ' ').replace(/\n+/g, ' ').split(/[.!?。！？]/).map((s: any) => s.trim()).filter(Boolean);
 
 const pickBlankWord = (sentence: any) => {
   const words = sentence.match(/[A-Za-z']+/g) || [];
+  const STOP_WORDS = new Set(['the', 'a', 'an', 'and', 'or', 'but', 'is', 'am', 'are', 'was', 'were']);
   const candidates = Array.from(new Set(words))
-    .filter((word) => word.length >= 4 && !STOP_WORDS.has(word.toLowerCase()))
-    .sort((a, b) => b.length - a.length);
+    .filter((word: any) => word.length >= 4 && !STOP_WORDS.has(word.toLowerCase()))
+    .sort((a: any, b: any) => b.length - a.length);
   return candidates[0] || null;
 };
 
 const generateQuestionsFromText = (text: any) => {
   const sentences = splitSentences(text);
+  const DECOY_WORDS = ['apple', 'banana', 'orange', 'grape'];
   const generated = sentences
     .slice(0, 6)
-    .map((sentence) => {
+    .map((sentence: any) => {
       const cleanSentence = sentence.replace(/\s+/g, ' ').trim();
       const answer = pickBlankWord(cleanSentence);
       if (!answer) return null;
 
       const blanked = cleanSentence.replace(new RegExp(`\\b${answer}\\b`, 'i'), '_____');
-      const sentenceWords = Array.from(new Set((cleanSentence.match(/[A-Za-z']+/g) || []).filter((w) => w.length >= 4)));
-      const decoyPool = [...sentenceWords.filter((w) => w.toLowerCase() !== answer.toLowerCase()), ...DECOY_WORDS]
+      const sentenceWords = Array.from(new Set((cleanSentence.match(/[A-Za-z']+/g) || []).filter((w: any) => w.length >= 4)));
+      const decoyPool = [...sentenceWords.filter((w: any) => w.toLowerCase() !== answer.toLowerCase()), ...DECOY_WORDS]
         .filter((word, idx, arr) => arr.findIndex((x) => x.toLowerCase() === word.toLowerCase()) === idx);
 
       return {

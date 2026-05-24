@@ -54,7 +54,7 @@ const shuffleArray = (array: any) => {
   return copied;
 };
 
-const prepareQuestions = (questions, useMock = false) => {
+const prepareQuestions = (questions: any, useMock = false) => {
   const cloned = questions.map((item) => ({
     ...item,
     choices: Array.isArray(item.choices) ? [...item.choices] : []
@@ -67,10 +67,10 @@ const prepareQuestions = (questions, useMock = false) => {
   }));
 };
 
-const splitSentences = (text) =>
+const splitSentences = (text: any) =>
   text.replace(/\r/g, ' ').replace(/\n+/g, ' ').split(/[.!?。！？]/).map((s) => s.trim()).filter(Boolean);
 
-const pickBlankWord = (sentence) => {
+const pickBlankWord = (sentence: any) => {
   const words = sentence.match(/[A-Za-z']+/g) || [];
   const candidates = Array.from(new Set(words))
     .filter((word) => word.length >= 4 && !STOP_WORDS.has(word.toLowerCase()))
@@ -78,7 +78,7 @@ const pickBlankWord = (sentence) => {
   return candidates[0] || null;
 };
 
-const generateQuestionsFromText = (text) => {
+const generateQuestionsFromText = (text: any) => {
   const sentences = splitSentences(text);
   const generated = sentences
     .slice(0, 6)

@@ -45,7 +45,7 @@ const DECOY_WORDS = [
 // =========================
 // ユーティリティ
 // =========================
-const shuffleArray = (array) => {
+const shuffleArray = (array: any) => {
   const copied = [...array];
   for (let i = copied.length - 1; i > 0; i -= 1) {
     const j = Math.floor(Math.random() * (i + 1));
